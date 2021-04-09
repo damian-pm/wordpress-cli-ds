@@ -52,7 +52,7 @@ class Commands {
             if (count($params) == 2) {
                 printText("Available themes:\n******************* ");
                 $result = $db->query(strtr("SELECT option_value from %prefix_options where option_name='_site_transient_theme_roots'", [
-                    '%prefix_' => 'pas_'
+                    '%prefix_' => $this->prefix
                 ]))->fetchAll();
                 if (!empty($result)){
                     $themesName = array_keys(unserialize($result[0]['option_value']));
@@ -61,7 +61,7 @@ class Commands {
             } else if ($params[2] === 'change' && isset($params[3])) {
                 $db->query(strtr("UPDATE %prefix_options SET option_value='%theme_' where 
                 option_name='stylesheet' OR option_name='current_theme' OR option_name='template';", [
-                    '%prefix_'  => 'pas_',
+                    '%prefix_'  => $this->prefix,
                     '%theme_'   => $params[3]
                 ]));
                 printText("Theme updated!");
@@ -74,7 +74,7 @@ class Commands {
             if (count($params) == 2) {
                 printText("Active plugins:\n******************* ");
                 $result = $db->query(strtr("SELECT option_value from %prefix_options where option_name='active_plugins'", [
-                    '%prefix_' => 'pas_'
+                    '%prefix_' => $this->prefix
                 ]))->fetchAll();
                 if (!empty($result)){
                     $plugins = unserialize($result[0]['option_value']);
@@ -84,7 +84,7 @@ class Commands {
                 }
             } else if ($params[2] === 'deactive' && isset($params[3])) {
                 $result = $db->query(strtr("SELECT option_value from %prefix_options where option_name='active_plugins'", [
-                    '%prefix_' => 'pas_'
+                    '%prefix_' => $this->prefix
                 ]))->fetchAll();
                 if (!empty($result)){
                     $plugins = unserialize($result[0]['option_value']);
@@ -92,7 +92,7 @@ class Commands {
                 unset($plugins[$params[3]]);
                 $db->query(strtr("UPDATE %prefix_options SET option_value='%optionValue_' where 
                 option_name='active_plugins';", [
-                    '%prefix_'  => 'pas_',
+                    '%prefix_'  => $this->prefix,
                     '%optionValue_' => serialize(array_values($plugins))
                 ]));
                 printText("Plugin deactivated!");
@@ -105,6 +105,10 @@ class Commands {
  * Wykonywanie polecen konsolowych
  */
 class Console extends Commands {
+    public function __construct($prefix)
+    {
+        $this->prefix = $prefix;
+    }
     /**
      * Display command list
      */
@@ -150,7 +154,7 @@ class Console extends Commands {
 printText("*************************\nWordpress CLI Helper 1.0\n*************************");
 printText("Tested on: WP-5.7\n*************************\n");
 
-$console = new Console();
+$console = new Console($table_prefix);
 $console->init($argc, $argv);
 
 printText("\n");
