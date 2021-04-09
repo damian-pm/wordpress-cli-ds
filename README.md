@@ -1,4 +1,6 @@
 # wordpress-cli-ds
+version 1.0
+
 Simple wordpress console helper
 
 This console no need any functions from Wordpress only includes wp-config.php file so it is very usefull when you got problems with display ``admin panel``
