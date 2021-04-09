@@ -4,7 +4,8 @@ Simple wordpress console helper
 This console no need any functions from Wordpress only includes wp-config.php file so it is very usefull when you got problems with display ``admin panel``
 
 ![alt text](screen.png "Title")
-
+### Require
+* PDO module
 ### How install
 Simple just copy file ``console.php`` to your project, on the same level like wp-config.php.
 
